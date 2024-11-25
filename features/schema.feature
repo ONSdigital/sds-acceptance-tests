@@ -2,12 +2,12 @@ Feature: Publish and get schema
 
   Scenario: Publish schema version 1
     Given there are no schemas in the database with the Survey ID test_survey_id
-    When I publish version 1 schema with the Survey ID test_survey_id
+    When I call the Post Schema endpoint to publish version 1 schema with the Survey ID test_survey_id
     Then I should get the metadata of the schema with the Survey ID test_survey_id and version 1
 
   Scenario: Publish schema version 2
     Given there is 1 version of schema in the database with the Survey ID test_survey_id
-    When I publish version 2 schema with the Survey ID test_survey_id
+    When I call the Post Schema endpoint to publish version 2 schema with the Survey ID test_survey_id
     Then I should get the metadata of the schema with the Survey ID test_survey_id and version 2
 
   Scenario: Get schema version 1

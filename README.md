@@ -13,6 +13,7 @@ gcloud run jobs deploy acceptance-tests-run \
 --set-env-vars PROJECT_ID=$(echo $PROJECT_ID) \
 --set-env-vars FIRESTORE_DB_NAME=$(echo $PROJECT_ID)-sds \
 --set-env-vars API_URL=https://$(echo $SANDBOX_IP_ADDRESS).nip.io \
+--set-env-vars DATASET_BUCKET_NAME=$(echo $PROJECT_ID)-sds-europe-west2-dataset \
 --set-env-vars OAUTH_CLIENT_ID=$(echo $OAUTH_CLIENT_ID) \
 --set-env-vars TEST_FAIL_FLAG=False \
 --max-retries 0 \

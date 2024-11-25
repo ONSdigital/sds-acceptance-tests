@@ -4,7 +4,7 @@ from urllib3 import Retry
 import json
 
 import google.oauth2.id_token
-from google.cloud import firestore
+from google.cloud import firestore, storage
 from behave.runner import Context
 from config import config
 
@@ -23,6 +23,30 @@ def firestore_client():
     firestore_client = firestore.Client(project=config.PROJECT_ID, database=config.FIRESTORE_DB_NAME)
 
     return firestore_client
+
+
+def storage_client():
+    storage_client = storage.Client(project=config.PROJECT_ID)
+
+    return storage_client
+
+
+def get_bucket(bucket_name: str) -> storage.Bucket:
+    """
+    Method to get the bucket from the storage client.
+
+    Parameters:
+        storage_client (storage.Client): the storage client to use.
+        bucket_name (str): the name of the bucket to get.
+
+    Returns:
+        storage.Bucket: the bucket to use.
+    """
+    client = storage_client()
+    bucket = client.get_bucket(bucket_name)
+
+    return bucket
+
     
 
 def generate_headers() -> dict[str, str]:
@@ -66,6 +90,14 @@ def cleanup_test_data():
     perform_delete_on_collection_with_test_survey_id(
         client,
         schema_collection,
+        "test_survey_id"
+    )
+
+    datsaet_collection = client.collection('datasets')
+
+    perform_delete_on_collection_with_test_survey_id(
+        client,
+        datsaet_collection,
         "test_survey_id"
     )
 
@@ -149,6 +181,8 @@ def before_all(context: Context):
     context.api_client = api_client()
     context.api_url = config.API_URL
     context.headers = generate_headers()
+    context.dataset_bucket = get_bucket(config.DATASET_BUCKET_NAME)
+    context.publish_dataset_function_url = f"https://europe-west2-{config.PROJECT_ID}.cloudfunctions.net/new-dataset-function"
 
 
 # Run once after all features and scenarios are run
