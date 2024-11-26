@@ -176,6 +176,8 @@ def step_impl(context: Context):
 def step_impl(context: Context):
     table = context.table
 
+    assert len(context.response_json) == 2
+
     for count, dataset_metadata in enumerate(context.response_json):
         expected_metadata = {
                 "dataset_id": dataset_metadata["dataset_id"],
